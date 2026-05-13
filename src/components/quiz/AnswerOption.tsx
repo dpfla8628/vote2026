@@ -40,7 +40,7 @@ export function AnswerOption({
     >
       <span
         className={clsx(
-          'flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-sm font-bold transition-all',
+          'flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-sm font-bold transition-all mt-0.5',
           isSelected
             ? 'bg-violet-400 text-white'
             : 'bg-white/20 text-white/60 group-hover:bg-white/30 group-hover:text-white'
@@ -48,14 +48,24 @@ export function AnswerOption({
       >
         {LABELS[index]}
       </span>
-      <span
-        className={clsx(
-          'text-sm sm:text-base leading-relaxed transition-colors pt-0.5',
-          isSelected ? 'text-white font-medium' : 'text-white/80'
-        )}
-      >
-        {option.text}
-      </span>
+      <div className="flex flex-col gap-1 pt-0.5">
+        <span
+          className={clsx(
+            'text-sm sm:text-base font-bold leading-snug transition-colors',
+            isSelected ? 'text-white' : 'text-white/90'
+          )}
+        >
+          {option.text}
+        </span>
+        <span
+          className={clsx(
+            'text-xs sm:text-sm leading-relaxed transition-colors',
+            isSelected ? 'text-white/80' : 'text-white/50'
+          )}
+        >
+          {option.subtitle}
+        </span>
+      </div>
     </motion.button>
   )
 }

@@ -25,6 +25,7 @@ export interface PartyScore {
 export interface AnswerOption {
   id: string
   text: string
+  subtitle: string
   scores: PartyScore[]
 }
 
