@@ -15,7 +15,7 @@ export function ShareButton({ party, percentage }: ShareButtonProps) {
   const shareText = `${shareTitle}\n2026 지방선거 정책 매칭 테스트`
   const url =
     typeof window !== 'undefined'
-      ? `${window.location.origin}/result?p=${encodeURIComponent(party.id)}&pct=${encodeURIComponent(percentage)}`
+      ? `${window.location.origin}/result?p=${encodeURIComponent(party.id)}&pct=${encodeURIComponent(percentage)}&v=2`
       : ''
 
   const handleShare = async () => {

@@ -18,7 +18,16 @@ export const metadata: Metadata = {
     description: '정당 색깔이 아닌 공약으로 선택하세요. 10문항으로 나와 맞는 정당 찾기.',
     url: baseUrl,
     siteName: '2026 지방선거 정책 매칭 테스트',
-    images: [{ url: defaultOgImage, width: 1200, height: 630, alt: '2026 지방선거 정책 매칭 테스트' }],
+    images: [
+      {
+        url: defaultOgImage,
+        secureUrl: defaultOgImage,
+        type: 'image/png',
+        width: 1200,
+        height: 630,
+        alt: '2026 지방선거 정책 매칭 테스트',
+      },
+    ],
     locale: 'ko_KR',
     type: 'website',
   },
