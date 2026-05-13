@@ -26,7 +26,7 @@ const PARTIES = [
 ]
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
-const CARD_SPREAD = 0.88
+const CARD_SPREAD = 0.82
 
 export default function LandingPage() {
   const router = useRouter()
@@ -154,29 +154,37 @@ export default function LandingPage() {
                     : rawOffset
               const isCenter = offset === 0
               const isVisible = Math.abs(offset) <= 1
-              const side = Math.sign(offset)
-              const x = -cardWidth / 2 + offset * cardWidth * CARD_SPREAD
+              const previewSize = 76
+              const sideDistance = cardWidth * CARD_SPREAD
+              const x = isCenter
+                ? -cardWidth / 2
+                : offset * sideDistance - previewSize / 2
 
               return (
                 <motion.div
                   key={p.name}
                   className="absolute left-1/2 top-2 h-32"
                   style={{
-                    width: cardWidth,
+                    width: isCenter ? cardWidth : previewSize,
                     pointerEvents: isVisible ? 'auto' : 'none',
                     zIndex: isCenter ? 20 : 10 - Math.abs(offset),
                   }}
                   animate={{
                     x,
-                    scale: isCenter ? 1 : 0.74,
-                    opacity: isVisible ? (isCenter ? 1 : 0.28) : 0,
+                    scale: isCenter ? 1 : 0.78,
+                    opacity: isVisible ? (isCenter ? 1 : 0.34) : 0,
                     filter: isCenter ? 'blur(0px)' : 'blur(0.2px)',
                   }}
                   transition={{ duration: 0.42, ease: EASE }}
                 >
                   <div
-                    className="relative w-full h-full flex items-center gap-4 px-5 rounded-2xl border"
+                    className="relative w-full h-full flex items-center rounded-2xl border"
+                    data-center={isCenter}
                     style={{
+                      justifyContent: isCenter ? 'flex-start' : 'center',
+                      gap: isCenter ? 16 : 0,
+                      paddingLeft: isCenter ? 20 : 0,
+                      paddingRight: isCenter ? 20 : 0,
                       borderColor: `${p.color}${isCenter ? '55' : '18'}`,
                       background: `linear-gradient(135deg, ${p.color}${isCenter ? '28' : '0d'} 0%, ${p.color}05 100%)`,
                       boxShadow: isCenter
@@ -186,7 +194,7 @@ export default function LandingPage() {
                   >
                     <motion.span
                       className="text-5xl shrink-0 select-none"
-                      animate={{ scale: isCenter ? 1 : 0.82 }}
+                      animate={{ scale: isCenter ? 1 : 0.9 }}
                       transition={{ type: 'spring', stiffness: 420, damping: 16 }}
                     >
                       {p.emoji}
@@ -207,15 +215,6 @@ export default function LandingPage() {
                         {p.tagline}
                       </motion.p>
                     </div>
-
-                    {!isCenter && (
-                      <span
-                        className="absolute top-1/2 -translate-y-1/2 whitespace-nowrap text-white/55 text-sm font-bold"
-                        style={side < 0 ? { right: 18 } : { left: 18 }}
-                      >
-                        {p.name}
-                      </span>
-                    )}
 
                     {isCenter && (
                       <motion.div
