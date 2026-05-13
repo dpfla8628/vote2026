@@ -1,76 +1,74 @@
-'use client'
+import type { Metadata } from 'next'
+import { ResultClient } from './ResultClient'
 
-import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
-import { useRouter } from 'next/navigation'
-import { QuizResult } from '@/types'
-import { parties } from '@/data/parties'
-import { PartyMatchCard } from '@/components/result/PartyMatchCard'
-import { ScoreBar } from '@/components/result/ScoreBar'
-import { PolicyExplainer } from '@/components/result/PolicyExplainer'
-import { ShareButton } from '@/components/result/ShareButton'
+const PARTY_NAMES: Record<string, string> = {
+  minjoo: '더불어민주당',
+  ppp: '국민의힘',
+  chokuk: '조국혁신당',
+  reform: '개혁신당',
+  progressive: '진보당',
+  basicincome: '기본소득당',
+  justice: '정의당',
+}
 
-export default function ResultPage() {
-  const router = useRouter()
-  const [result, setResult] = useState<QuizResult | null>(null)
+const PARTY_EMOJIS: Record<string, string> = {
+  minjoo: '🔵',
+  ppp: '🔴',
+  chokuk: '🟢',
+  reform: '🟠',
+  progressive: '✊',
+  basicincome: '💜',
+  justice: '⚖️',
+}
 
-  useEffect(() => {
-    const raw = sessionStorage.getItem('quizResult')
-    if (!raw) {
-      router.replace('/')
-      return
+interface Props {
+  searchParams: { p?: string; pct?: string }
+}
+
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const partyId = searchParams.p ?? ''
+  const pct = searchParams.pct ?? '0'
+  const partyName = PARTY_NAMES[partyId]
+  const emoji = PARTY_EMOJIS[partyId] ?? '🗳️'
+
+  if (!partyName) {
+    return {
+      title: '2026 지방선거 정책 매칭 테스트',
+      description: '10문항으로 알아보는 나와 가장 잘 맞는 정당',
     }
-    setResult(JSON.parse(raw))
-  }, [router])
+  }
 
-  if (!result) return null
+  const title = `${emoji} ${partyName}과 ${pct}% 일치!`
+  const description = `나는 ${partyName}과 ${pct}% 일치했어요! 2026 지방선거 정책 매칭 테스트 — 나는 어떤 정당과 맞을까?`
 
-  const topParty = parties[result.topPartyId]
-  const topRanked = result.ranked.find((r) => r.partyId === result.topPartyId)!
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [
+        {
+          url: `/api/og?p=${partyId}&pct=${pct}`,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+      locale: 'ko_KR',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [`/api/og?p=${partyId}&pct=${pct}`],
+    },
+  }
+}
 
-  return (
-    <div className="min-h-screen px-4 py-12 max-w-lg mx-auto">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="space-y-6"
-      >
-        {/* Header */}
-        <div className="text-center mb-2">
-          <p className="text-white/50 text-sm">2026 지방선거 정책 매칭 결과</p>
-        </div>
-
-        {/* Matched party hero */}
-        <PartyMatchCard party={topParty} percentage={topRanked.percentage} />
-
-        {/* Score bars */}
-        <div className="rounded-3xl bg-white/5 border border-white/10 p-5">
-          <ScoreBar ranked={result.ranked} />
-        </div>
-
-        {/* Policy explainer */}
-        <div className="rounded-3xl bg-white/5 border border-white/10 p-5">
-          <PolicyExplainer party={topParty} />
-        </div>
-
-        {/* Share + restart */}
-        <ShareButton party={topParty} percentage={topRanked.percentage} />
-
-        <button
-          onClick={() => {
-            sessionStorage.removeItem('quizResult')
-            router.push('/quiz')
-          }}
-          className="w-full py-4 rounded-2xl font-semibold text-white/60 border border-white/10
-            hover:bg-white/5 transition-colors duration-200"
-        >
-          다시 테스트하기
-        </button>
-
-        <p className="text-center text-white/25 text-xs leading-relaxed pb-4">
-          본 결과는 2026년 6·3 지방선거 정당 공약 기반이며, 특정 정당을 지지하거나 반대하지 않습니다.
-        </p>
-      </motion.div>
-    </div>
-  )
+export default function ResultPage({ searchParams }: Props) {
+  const partyId = searchParams.p ?? ''
+  const pct = Number(searchParams.pct ?? 0)
+  return <ResultClient partyId={partyId} pct={pct} />
 }

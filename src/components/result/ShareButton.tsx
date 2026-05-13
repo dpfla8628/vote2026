@@ -11,8 +11,9 @@ interface ShareButtonProps {
 export function ShareButton({ party, percentage }: ShareButtonProps) {
   const [copied, setCopied] = useState(false)
 
-  const shareText = `나는 ${party.name}과 ${percentage}% 일치했어요! 2026 지방선거 정책 매칭 테스트`
-  const url = typeof window !== 'undefined' ? window.location.origin : ''
+  const shareText = `나는 ${party.name}과 ${percentage}% 일치했어요!\n2026 지방선거 정책 매칭 테스트`
+  // href 전체를 공유 — ?p=&pct= 쿼리가 포함된 결과 URL
+  const url = typeof window !== 'undefined' ? window.location.href : ''
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -40,7 +41,7 @@ export function ShareButton({ party, percentage }: ShareButtonProps) {
       ) : (
         <>
           <span>📤</span>
-          결과 공유하기
+          카카오톡으로 결과 공유하기
         </>
       )}
     </button>

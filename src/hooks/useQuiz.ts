@@ -34,7 +34,8 @@ export function useQuiz() {
           setTimeout(() => {
             const result = calculateResult(newAnswers)
             sessionStorage.setItem('quizResult', JSON.stringify(result))
-            router.push('/result')
+            const top = result.ranked[0]
+            router.push(`/result?p=${top.partyId}&pct=${top.percentage}`)
           }, 800)
         } else {
           setSelectedId(null)
