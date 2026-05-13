@@ -10,8 +10,8 @@ import { ScoreBar } from '@/components/result/ScoreBar'
 import { PolicyExplainer } from '@/components/result/PolicyExplainer'
 import { ShareButton } from '@/components/result/ShareButton'
 
-const ASSEMBLY_MEMBERS_URL = 'https://www.assembly.go.kr/members/22nd'
-const POLLING_PLACE_URL = 'https://si.nec.go.kr/'
+const ASSEMBLY_MEMBERS_URL = 'https://www.lawmake.kr/my-district'
+const POLLING_PLACE_URL = 'https://vote2026.kr/voting/'
 
 interface ResultClientProps {
   partyId: string
@@ -80,7 +80,7 @@ export function ResultClient({ partyId, pct }: ResultClientProps) {
           >
             <span>
               <span className="block text-sm font-bold">내 지역 국회의원</span>
-              <span className="block text-xs text-white/45 mt-0.5">국회에서 찾아보기</span>
+              <span className="block text-xs text-white/45 mt-0.5">지역구로 찾아보기</span>
             </span>
             <span className="text-white/40" aria-hidden="true">↗</span>
           </a>
@@ -94,7 +94,7 @@ export function ResultClient({ partyId, pct }: ResultClientProps) {
           >
             <span>
               <span className="block text-sm font-bold">투표소 찾기</span>
-              <span className="block text-xs text-white/45 mt-0.5">선관위에서 확인하기</span>
+              <span className="block text-xs text-white/45 mt-0.5">2026 안내에서 검색</span>
             </span>
             <span className="text-white/40" aria-hidden="true">↗</span>
           </a>
