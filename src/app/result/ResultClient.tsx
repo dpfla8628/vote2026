@@ -100,6 +100,18 @@ export function ResultClient({ partyId, pct }: ResultClientProps) {
           </a>
         </div>
 
+        <div className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-center">
+          <p className="text-white/80 text-sm font-semibold">
+            사전투표 05.29.(금) ~ 05.30.(토) 오전 6시 ~ 오후 6시
+          </p>
+          <p className="text-white/60 text-sm mt-1">
+            투표일 2026.06.03.(수) 법정공휴일
+          </p>
+          <p className="text-white/35 text-xs mt-3">
+            내 한 표로 지역의 내일을 선택해요.
+          </p>
+        </div>
+
         <button
           onClick={() => {
             sessionStorage.removeItem('quizResult')
