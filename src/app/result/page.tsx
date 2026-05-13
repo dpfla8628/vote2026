@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { getSiteUrl } from '@/lib/site'
 import { ResultClient } from './ResultClient'
 
 const PARTY_NAMES: Record<string, string> = {
@@ -26,8 +27,9 @@ interface Props {
 }
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const baseUrl = getSiteUrl()
   const partyId = searchParams.p ?? ''
-  const pct = searchParams.pct ?? '0'
+  const pct = String(Number(searchParams.pct ?? 0) || 0)
   const partyName = PARTY_NAMES[partyId]
   const emoji = PARTY_EMOJIS[partyId] ?? '🗳️'
 
@@ -35,21 +37,35 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     return {
       title: '2026 지방선거 정책 매칭 테스트',
       description: '10문항으로 알아보는 나와 가장 잘 맞는 정당',
+      alternates: { canonical: `${baseUrl}/` },
+      openGraph: {
+        title: '2026 지방선거 정책 매칭 테스트',
+        description: '10문항으로 알아보는 나와 가장 잘 맞는 정당',
+        url: `${baseUrl}/`,
+        images: [{ url: `${baseUrl}/api/og`, width: 1200, height: 630 }],
+        locale: 'ko_KR',
+        type: 'website',
+      },
     }
   }
 
   const title = `${emoji} ${partyName}과 ${pct}% 일치!`
   const description = `나는 ${partyName}과 ${pct}% 일치했어요! 2026 지방선거 정책 매칭 테스트 — 나는 어떤 정당과 맞을까?`
+  const resultUrl = `${baseUrl}/result?p=${encodeURIComponent(partyId)}&pct=${encodeURIComponent(pct)}`
+  const imageUrl = `${baseUrl}/api/og?p=${encodeURIComponent(partyId)}&pct=${encodeURIComponent(pct)}`
 
   return {
     title,
     description,
+    alternates: { canonical: resultUrl },
     openGraph: {
       title,
       description,
+      url: resultUrl,
+      siteName: '2026 지방선거 정책 매칭 테스트',
       images: [
         {
-          url: `/api/og?p=${partyId}&pct=${pct}`,
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: title,
@@ -62,7 +78,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
       card: 'summary_large_image',
       title,
       description,
-      images: [`/api/og?p=${partyId}&pct=${pct}`],
+      images: [imageUrl],
     },
   }
 }

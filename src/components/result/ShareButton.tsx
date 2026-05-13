@@ -11,14 +11,21 @@ interface ShareButtonProps {
 export function ShareButton({ party, percentage }: ShareButtonProps) {
   const [copied, setCopied] = useState(false)
 
-  const shareText = `나는 ${party.name}과 ${percentage}% 일치했어요!\n2026 지방선거 정책 매칭 테스트`
-  // href 전체를 공유 — ?p=&pct= 쿼리가 포함된 결과 URL
-  const url = typeof window !== 'undefined' ? window.location.href : ''
+  const shareTitle = `나는 ${party.name}과 ${percentage}% 일치했어요!`
+  const shareText = `${shareTitle}\n2026 지방선거 정책 매칭 테스트`
+  const url =
+    typeof window !== 'undefined'
+      ? `${window.location.origin}/result?p=${encodeURIComponent(party.id)}&pct=${encodeURIComponent(percentage)}`
+      : ''
 
   const handleShare = async () => {
     if (navigator.share) {
       try {
-        await navigator.share({ title: shareText, url })
+        await navigator.share({
+          title: shareTitle,
+          text: '2026 지방선거 정책 매칭 테스트',
+          url,
+        })
       } catch {
         // user cancelled
       }

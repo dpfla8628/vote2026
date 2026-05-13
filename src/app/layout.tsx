@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/react'
+import { getSiteUrl } from '@/lib/site'
 import './globals.css'
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : 'http://localhost:3000'
+const baseUrl = getSiteUrl()
+const defaultOgImage = `${baseUrl}/api/og`
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -16,7 +16,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: '2026 지방선거 정책 매칭 테스트',
     description: '정당 색깔이 아닌 공약으로 선택하세요. 10문항으로 나와 맞는 정당 찾기.',
-    images: [{ url: '/api/og', width: 1200, height: 630, alt: '2026 지방선거 정책 매칭 테스트' }],
+    url: baseUrl,
+    siteName: '2026 지방선거 정책 매칭 테스트',
+    images: [{ url: defaultOgImage, width: 1200, height: 630, alt: '2026 지방선거 정책 매칭 테스트' }],
     locale: 'ko_KR',
     type: 'website',
   },
@@ -24,7 +26,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: '2026 지방선거 정책 매칭 테스트',
     description: '정당 색깔이 아닌 공약으로 선택하세요.',
-    images: ['/api/og'],
+    images: [defaultOgImage],
   },
 }
 

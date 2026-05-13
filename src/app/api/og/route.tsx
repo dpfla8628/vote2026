@@ -12,16 +12,17 @@ const PARTIES: Record<string, { name: string; emoji: string; color: string; tagl
   justice:     { name: '정의당',       emoji: '⚖️', color: '#B7950B', tagline: '정의로운 나라, 평등한 일상' },
 }
 
-async function loadKoreanFont() {
+async function loadKoreanFont(): Promise<ArrayBuffer | null> {
+  const FONT_URL =
+    'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2-subset/Pretendard-Bold.woff2'
   try {
-    const css = await fetch(
-      'https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700&subset=korean',
-      { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' } }
-    ).then((r) => r.text())
-
-    const match = css.match(/src: url\(([^)]+)\) format\('woff2'\)/)
-    if (!match?.[1]) return null
-    return await fetch(match[1]).then((r) => r.arrayBuffer())
+    const res = await Promise.race([
+      fetch(FONT_URL),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('font timeout')), 4000)
+      ),
+    ])
+    return await (res as Response).arrayBuffer()
   } catch {
     return null
   }
@@ -35,9 +36,9 @@ export async function GET(req: Request) {
 
   const fontData = await loadKoreanFont()
   const fonts = fontData
-    ? [{ name: 'NotoSansKR', data: fontData, weight: 700 as const, style: 'normal' as const }]
+    ? [{ name: 'Pretendard', data: fontData, weight: 700 as const, style: 'normal' as const }]
     : []
-  const fontFamily = fontData ? 'NotoSansKR, sans-serif' : 'sans-serif'
+  const fontFamily = fontData ? 'Pretendard, sans-serif' : 'sans-serif'
 
   // 결과 페이지용 OG (party + percentage)
   if (party && pct) {
