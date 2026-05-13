@@ -26,7 +26,7 @@ const PARTIES = [
 ]
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
-const CARD_SPREAD = 0.62
+const CARD_SPREAD = 0.88
 
 export default function LandingPage() {
   const router = useRouter()
@@ -154,6 +154,7 @@ export default function LandingPage() {
                     : rawOffset
               const isCenter = offset === 0
               const isVisible = Math.abs(offset) <= 1
+              const side = Math.sign(offset)
               const x = -cardWidth / 2 + offset * cardWidth * CARD_SPREAD
 
               return (
@@ -191,7 +192,10 @@ export default function LandingPage() {
                       {p.emoji}
                     </motion.span>
 
-                    <div className="text-left min-w-0 overflow-hidden">
+                    <div
+                      className="text-left min-w-0 overflow-hidden"
+                      style={{ display: isCenter ? 'block' : 'none' }}
+                    >
                       <p className="text-white font-extrabold text-lg leading-tight truncate">
                         {p.name}
                       </p>
@@ -203,6 +207,15 @@ export default function LandingPage() {
                         {p.tagline}
                       </motion.p>
                     </div>
+
+                    {!isCenter && (
+                      <span
+                        className="absolute top-1/2 -translate-y-1/2 whitespace-nowrap text-white/55 text-sm font-bold"
+                        style={side < 0 ? { right: 18 } : { left: 18 }}
+                      >
+                        {p.name}
+                      </span>
+                    )}
 
                     {isCenter && (
                       <motion.div
