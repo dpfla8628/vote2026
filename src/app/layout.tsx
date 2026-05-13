@@ -4,7 +4,7 @@ import { getSiteUrl } from '@/lib/site'
 import './globals.css'
 
 const baseUrl = getSiteUrl()
-const defaultOgImage = `${baseUrl}/api/og`
+const defaultOgImage = `${baseUrl}/og/default.png`
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),

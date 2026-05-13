@@ -22,6 +22,16 @@ const PARTY_EMOJIS: Record<string, string> = {
   justice: '⚖️',
 }
 
+const PARTY_IMAGES: Record<string, string> = {
+  minjoo: 'result-minjoo.png',
+  ppp: 'result-ppp.png',
+  chokuk: 'result-chokuk.png',
+  reform: 'result-reform.png',
+  progressive: 'result-progressive.png',
+  basicincome: 'result-basicincome.png',
+  justice: 'result-justice.png',
+}
+
 interface Props {
   searchParams: { p?: string; pct?: string }
 }
@@ -42,7 +52,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
         title: '2026 지방선거 정책 매칭 테스트',
         description: '10문항으로 알아보는 나와 가장 잘 맞는 정당',
         url: `${baseUrl}/`,
-        images: [{ url: `${baseUrl}/api/og`, width: 1200, height: 630 }],
+        images: [{ url: `${baseUrl}/og/default.png`, width: 1200, height: 630 }],
         locale: 'ko_KR',
         type: 'website',
       },
@@ -52,7 +62,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   const title = `${emoji} ${partyName}과 ${pct}% 일치!`
   const description = `나는 ${partyName}과 ${pct}% 일치했어요! 2026 지방선거 정책 매칭 테스트 — 나는 어떤 정당과 맞을까?`
   const resultUrl = `${baseUrl}/result?p=${encodeURIComponent(partyId)}&pct=${encodeURIComponent(pct)}`
-  const imageUrl = `${baseUrl}/api/og?p=${encodeURIComponent(partyId)}&pct=${encodeURIComponent(pct)}`
+  const imageUrl = `${baseUrl}/og/${PARTY_IMAGES[partyId]}`
 
   return {
     title,
