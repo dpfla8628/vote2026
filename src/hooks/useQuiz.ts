@@ -86,6 +86,13 @@ export function useQuiz() {
     [selectedId, answers, currentQuestion, isLast, currentIndex, router]
   )
 
+  const goBack = useCallback(() => {
+    if (currentIndex === 0 || state === 'calculating') return
+
+    clearPendingTimeouts()
+    window.history.back()
+  }, [clearPendingTimeouts, currentIndex, state])
+
   const restart = useCallback(() => {
     clearPendingTimeouts()
     window.history.replaceState({ quizIndex: 0 }, '', window.location.href)
@@ -103,6 +110,7 @@ export function useQuiz() {
     progress,
     selectedId,
     handleAnswer,
+    goBack,
     restart,
     answers,
   }

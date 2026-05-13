@@ -6,7 +6,7 @@ import { ProgressBar } from '@/components/layout/ProgressBar'
 import { QuizCard } from '@/components/quiz/QuizCard'
 
 export default function QuizPage() {
-  const { state, currentQuestion, currentIndex, totalQuestions, progress, selectedId, handleAnswer } =
+  const { state, currentQuestion, currentIndex, totalQuestions, progress, selectedId, handleAnswer, goBack } =
     useQuiz()
 
   return (
@@ -38,6 +38,18 @@ export default function QuizPage() {
             </motion.div>
           ) : (
             <motion.div key="quiz" className="w-full max-w-lg">
+              <button
+                type="button"
+                onClick={goBack}
+                disabled={currentIndex === 0}
+                className="mb-5 inline-flex items-center gap-2 text-sm font-semibold text-white/55
+                  transition-colors hover:text-white disabled:opacity-0 disabled:pointer-events-none"
+                aria-label="이전 질문으로 돌아가기"
+              >
+                <span aria-hidden="true">←</span>
+                이전 질문
+              </button>
+
               <QuizCard
                 question={currentQuestion}
                 selectedId={selectedId}
