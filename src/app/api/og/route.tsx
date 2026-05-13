@@ -2,27 +2,22 @@ import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
 
-const PARTIES: Record<string, { name: string; emoji: string; color: string; tagline: string }> = {
-  minjoo:      { name: '더불어민주당', emoji: '🔵', color: '#1E6FCC', tagline: '균형 잡힌 성장, 모두를 위한 나라' },
-  ppp:         { name: '국민의힘',     emoji: '🔴', color: '#C0392B', tagline: '안정과 성장, 자유로운 대한민국' },
-  chokuk:      { name: '조국혁신당',   emoji: '🟢', color: '#00875A', tagline: '개혁을 완성하는 혁신의 힘' },
-  reform:      { name: '개혁신당',     emoji: '🟠', color: '#E67E22', tagline: '기득권을 깨는 실용적 개혁' },
-  progressive: { name: '진보당',       emoji: '✊', color: '#A93226', tagline: '노동자·서민이 주인인 나라' },
-  basicincome: { name: '기본소득당',   emoji: '💜', color: '#7D3C98', tagline: '모두에게 기본, 모두가 주인' },
-  justice:     { name: '정의당',       emoji: '⚖️', color: '#B7950B', tagline: '정의로운 나라, 평등한 일상' },
+const PARTIES: Record<string, { name: string; color: string; tagline: string }> = {
+  minjoo:      { name: '더불어민주당', color: '#1E6FCC', tagline: '균형 잡힌 성장, 모두를 위한 나라' },
+  ppp:         { name: '국민의힘',     color: '#C0392B', tagline: '안정과 성장, 자유로운 대한민국' },
+  chokuk:      { name: '조국혁신당',   color: '#00875A', tagline: '개혁을 완성하는 혁신의 힘' },
+  reform:      { name: '개혁신당',     color: '#E67E22', tagline: '기득권을 깨는 실용적 개혁' },
+  progressive: { name: '진보당',       color: '#A93226', tagline: '노동자·서민이 주인인 나라' },
+  basicincome: { name: '기본소득당',   color: '#7D3C98', tagline: '모두에게 기본, 모두가 주인' },
+  justice:     { name: '정의당',       color: '#B7950B', tagline: '정의로운 나라, 평등한 일상' },
 }
 
 async function loadKoreanFont(): Promise<ArrayBuffer | null> {
-  const FONT_URL =
-    'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2-subset/Pretendard-Bold.woff2'
   try {
-    const res = await Promise.race([
-      fetch(FONT_URL),
-      new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('font timeout')), 4000)
-      ),
-    ])
-    return await (res as Response).arrayBuffer()
+    const res = await fetch(
+      new URL('../../fonts/Pretendard-Bold.subset.woff', import.meta.url)
+    )
+    return await res.arrayBuffer()
   } catch {
     return null
   }
@@ -80,9 +75,18 @@ export async function GET(req: Request) {
             2026 지방선거 정책 매칭 결과
           </div>
 
-          {/* 이모지 */}
-          <div style={{ fontSize: 96, marginBottom: 16, display: 'flex' }}>
-            {party.emoji}
+          <div
+            style={{
+              width: 96,
+              height: 96,
+              borderRadius: 999,
+              background: 'rgba(255,255,255,0.92)',
+              border: `12px solid ${party.color}`,
+              marginBottom: 24,
+              display: 'flex',
+            }}
+          >
+            <div />
           </div>
 
           {/* 정당명 */}
@@ -175,10 +179,18 @@ export async function GET(req: Request) {
           }}
         />
 
-        {/* 이모지 열 */}
-        <div style={{ display: 'flex', gap: 16, marginBottom: 40, fontSize: 52 }}>
-          {'🔵🔴🟢🟠✊💜⚖️'.split('').filter(Boolean).map((e, i) => (
-            <span key={i}>{e}</span>
+        <div style={{ display: 'flex', gap: 16, marginBottom: 40 }}>
+          {['#1E6FCC', '#C0392B', '#00875A', '#E67E22', '#A93226', '#7D3C98', '#B7950B'].map((color, i) => (
+            <span
+              key={i}
+              style={{
+                width: 38,
+                height: 38,
+                borderRadius: 999,
+                background: color,
+                border: '4px solid rgba(255,255,255,0.78)',
+              }}
+            />
           ))}
         </div>
 
