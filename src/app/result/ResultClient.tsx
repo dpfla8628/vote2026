@@ -10,6 +10,9 @@ import { ScoreBar } from '@/components/result/ScoreBar'
 import { PolicyExplainer } from '@/components/result/PolicyExplainer'
 import { ShareButton } from '@/components/result/ShareButton'
 
+const ASSEMBLY_MEMBERS_URL = 'https://www.assembly.go.kr/members/22nd'
+const POLLING_PLACE_URL = 'https://si.nec.go.kr/'
+
 interface ResultClientProps {
   partyId: string
   pct: number
@@ -66,6 +69,36 @@ export function ResultClient({ partyId, pct }: ResultClientProps) {
         </div>
 
         <ShareButton party={topParty} percentage={displayPercentage} />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <a
+            href={ASSEMBLY_MEMBERS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-white
+              hover:bg-white/10 transition-colors duration-200 flex items-center justify-between gap-3"
+          >
+            <span>
+              <span className="block text-sm font-bold">내 지역 국회의원</span>
+              <span className="block text-xs text-white/45 mt-0.5">국회에서 찾아보기</span>
+            </span>
+            <span className="text-white/40" aria-hidden="true">↗</span>
+          </a>
+
+          <a
+            href={POLLING_PLACE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-white
+              hover:bg-white/10 transition-colors duration-200 flex items-center justify-between gap-3"
+          >
+            <span>
+              <span className="block text-sm font-bold">투표소 찾기</span>
+              <span className="block text-xs text-white/45 mt-0.5">선관위에서 확인하기</span>
+            </span>
+            <span className="text-white/40" aria-hidden="true">↗</span>
+          </a>
+        </div>
 
         <button
           onClick={() => {
